@@ -6,8 +6,8 @@ import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CoAgents Starter",
-  description: "CoAgents Starter",
+  title: "AG2 CopilotKit Starter",
+  description: "AG2 CopilotKit Starter",
 };
 
 export default function RootLayout({ children }: { children: any }) {
