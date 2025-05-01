@@ -1,0 +1,1 @@
+fastagency[openai, fastapi, copilotkit, server]
