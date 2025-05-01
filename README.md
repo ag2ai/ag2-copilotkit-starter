@@ -48,8 +48,9 @@ setx OPENAI_API_KEY "your_openai_api_key"
 
 ### 3. Start the Backend Server
 
+The command below assumes that you are already inside the `agent-py` directory. If not please `cd` into the directory before running the command.
+
 ```sh
-cd agent-py
 uvicorn simple_workflow:app --port 8008 --reload
 ```
 
@@ -59,6 +60,8 @@ The backend server will start at http://localhost:8008.
 
 ### 1. Install Frontend Dependencies
 
+Open a new terminal session and run the below command
+
 ```sh
 cd ui
 pnpm i
@@ -66,16 +69,15 @@ pnpm i
 
 ### 2. Start the Frontend Application
 
+The command below assumes that you are already inside the `ui` directory. If not please `cd` into the directory before running the command.
+
 ```sh
-cd ui
 pnpm run dev
 ```
 
 The frontend application will start at http://localhost:3000.
 
-## Usage
-
-Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+After starting the frontend, please allow a few moments for the Next.js application to compile fully. Once compilation is complete, you can interact with the chat window to communicate with the AG2 agent.
 
 ## Additional Resources
 
