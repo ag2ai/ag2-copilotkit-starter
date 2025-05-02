@@ -1,4 +1,4 @@
-# Ag2 CopilotKit Starter
+# CopilotKit-AG2 Starter
 
 This repository contains a simple starter project that demonstrates how to build AI agents with AG2 that interact with CopilotKit.
 
