@@ -63,33 +63,42 @@ def lookup_member(
 
 # Function to create personalized itinerary
 def create_itinerary(
-    destination: Annotated[str, "Travel destination"],
+    destination: Annotated[str, "Travel destination (e.g., New York, Paris, Tokyo)"],
     days: Annotated[int, "Number of days for the trip"],
     membership_type: Annotated[str, "Type of membership (premium or standard)"],
-    preferences: Annotated[list, "List of traveler preferences"]
+    preferences: Annotated[list, "Traveler preferences (e.g., fine dining, cultural tours)"]
 ) -> dict[str, Any]:
-    """Create a personalized travel itinerary based on member details"""
+    """Create a realistic, personalized travel itinerary based on member details."""
     
-    # Create different experiences based on membership type
-    if membership_type == "premium":
-        accommodations = "Luxury 5-star hotel or boutique resort"
-        transportation = "Private car service with dedicated driver"
-        dining = "Reservations at fine dining restaurants and local gems"
-        activities = f"Customized private tours focusing on {', '.join(preferences)}"
-    else:
-        accommodations = "Comfortable mid-range hotel"
-        transportation = "Shared shuttle service and public transport options"
-        dining = "Recommended local restaurants at moderate price points"
-        activities = f"Group tours to popular attractions with focus on {', '.join(preferences)}"
-    
-    # Return the formatted itinerary
+    if not destination or days <= 0:
+        return {"error": "Invalid destination or number of days."}
+
+    itinerary = []
+    for day in range(1, days + 1):
+        day_plan = {
+            "day": f"Day {day}",
+            "morning": "",
+            "afternoon": "",
+            "evening": "",
+        }
+
+        if membership_type == "premium":
+            day_plan["morning"] = f"Private tour or exclusive experience aligned with: {', '.join(preferences)}"
+            day_plan["afternoon"] = "Relax at a luxury spa, explore high-end shopping districts, or enjoy curated local experiences."
+            day_plan["evening"] = "Dine at a top-rated restaurant with a reservation made just for you."
+        else:
+            day_plan["morning"] = f"Join a small group tour covering key attractions related to: {', '.join(preferences)}"
+            day_plan["afternoon"] = "Take a self-guided walk or visit a popular local spot recommended by travel experts."
+            day_plan["evening"] = "Enjoy a casual dinner at a popular neighborhood restaurant."
+
+        itinerary.append(day_plan)
+
     return {
         "destination": destination,
         "days": days,
-        "accommodations": accommodations,
-        "transportation": transportation,
-        "dining": dining,
-        "activities": activities,
+        "itinerary": itinerary,
+        "accommodation": "5-star hotel" if membership_type == "premium" else "3-star or boutique hotel",
+        "transportation": "Private car service" if membership_type == "premium" else "Local transport and shared rides",
         "is_draft": True
     }
 
@@ -101,34 +110,51 @@ llm_config = LLMConfig(
 
 wf = Workflow()
 
-@wf.register(name="simple_learning", description="A simple travel itenarary generator workflow")
+SYSTEM_MESSAGE="""You are a professional travel agent who creates detailed, personalized day-by-day travel itineraries for any destination.
+
+WORKFLOW:
+1. Greet the customer warmly and ask for their member ID.
+2. Use the `lookup_member` function to retrieve their profile information.
+3. Address the customer by name and acknowledge their membership level (premium or standard).
+4. Ask for their desired destination, specific cities (if applicable), travel start date, and trip duration.
+    - If the customer mentions only a country (e.g., "USA" or "Croatia"), ask them which cities they'd like to visit.
+    - If they're unsure, suggest 2–3 well-known cities in that country based on general travel knowledge.
+5. Use the `create_itinerary` function to generate a personalized day-by-day itinerary that:
+    - Aligns with their membership level (e.g., premium → luxury hotels, fine dining; standard → comfort & value).
+    - Includes named **hotels, restaurants, attractions, and activities** based on typical travel knowledge for the selected cities.
+    - Provides **specific daily structure**: morning, afternoon, evening.
+    - Minimizes travel time by grouping activities geographically.
+    - Feels locally authentic and realistic even though this is a demo (do not say “sample” or “example” in the response).
+    - If the user provides no preferences, generate a balanced mix of culture, food, leisure, and exploration.
+6. Present the itinerary with clear headers (e.g., **Day 1**, **Day 2**), using markdown-style formatting if supported.
+7. Ask if the customer would like to modify any days, switch cities, or add/remove experiences.
+8. Once finalized, confirm the itinerary and thank them for using the service.
+
+Tone: Friendly, professional, and knowledgeable. You are a helpful concierge who wants the user to have an amazing experience.
+
+Important: When a membership ID is not found in the system, politely inform the user that something may be wrong and ask them to double-check their ID."""
+
+
+
+INITIAL_MESSAGE = """Hi there! 👋 I'm your personal Travel Guide, here to help you plan an unforgettable trip.
+
+To get started, could you please share your membership ID? This will help me tailor recommendations based on your preferences and travel style."""
+
+@wf.register(name="hitl_workflow", description="A simple travel itenarary generator workflow")
 def hitl_workflow(ui: UI, params: dict[str, Any]) -> str:
+    initial_message = ui.text_input(
+        sender="Workflow",
+        recipient="User",
+        prompt=INITIAL_MESSAGE,
+    )
+    
     # Create the travel agent
     with llm_config:
         travel_agent = ConversableAgent(
-            name="travel_agent",
-            system_message="""You are a professional travel agent who creates detailed day-by-day travel itineraries.
-
-    WORKFLOW:
-    1. Greet the customer warmly and ask for their member ID
-    2. Use the lookup_member function to retrieve their profile information
-    3. Address them by name and acknowledge their membership level (premium or standard)
-    4. Ask about their desired destination and trip duration
-    5. Create a personalized day-by-day itinerary using the create_itinerary function that:
-        - Matches their membership level (premium: luxury options; standard: value options)
-        - Incorporates their personal preferences from their profile
-        - Details specific activities, meals, and accommodations for EACH day
-        - Organizes attractions geographically to minimize travel time
-        - Includes specific restaurant recommendations and activity timings
-    6. Present the complete day-by-day itinerary with clear DAY 1, DAY 2, etc. headers
-    7. Ask if they want any modifications to specific days
-    8. Confirm the final itinerary when they're satisfied
-
-    For premium members, emphasize exclusive experiences, private tours, and luxury accommodations.
-    For standard members, focus on good value, popular attractions, and comfortable options.
-
-    Always maintain a friendly, professional tone throughout the conversation.
-    """)
+                name="travel_agent",
+                system_message=SYSTEM_MESSAGE
+            )
+        
 
     # Create the customer agent (human input)
     customer = ConversableAgent(
@@ -154,7 +180,7 @@ def hitl_workflow(ui: UI, params: dict[str, Any]) -> str:
     # Start the conversation
     response = customer.run(
         travel_agent,
-        message="Hi, I'd like to plan a vacation.",
+        message=initial_message,
         summary_method="reflection_with_llm"
     )
 

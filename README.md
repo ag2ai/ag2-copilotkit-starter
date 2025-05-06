@@ -8,6 +8,7 @@ This repository contains a simple starter project that demonstrates how to build
 ag2-copilotkit-starter/
 ├── agent-py/           # Python backend with AG2 agents
 │   └── simple_workflow.py
+│   └── hitl_workflow.py
 └── ui/                 # Frontend application
 ```
 
@@ -53,6 +54,8 @@ The command below assumes that you are already inside the `agent-py` directory. 
 ```sh
 uvicorn simple_workflow:app --port 8008 --reload
 ```
+
+> The command above starts the simple agent chat workflow. You can explore other workflows available in the `agent-py` directory, try them out, or even create your own. Each workflow file includes the command to run it at the bottom.
 
 The backend server will start at http://localhost:8008.
 
