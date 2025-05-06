@@ -186,7 +186,14 @@ def hitl_workflow(ui: UI, params: dict[str, Any]) -> str:
 
     return ui.process(response)  # type: ignore[no-any-return]
 
-adapter = AWPAdapter(provider=wf)
+
+def without_student_messages(message: Any) -> bool:
+    return not (message.type == "text" and message.content.sender == "customer")
+
+
+adapter = AWPAdapter(
+    provider=wf, wf_name="hitl_workflow", filter=without_student_messages
+)
 
 app = FastAPI()
 app.include_router(adapter.router)
