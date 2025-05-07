@@ -107,7 +107,7 @@ def without_user_messages(message: Any) -> bool:
 
 
 adapter = AWPAdapter(
-    provider=wf, wf_name="hitl_workflow", filter=without_user_messages
+    provider=wf, wf_name="simple_learning", filter=without_user_messages
 )
 
 app = FastAPI()
