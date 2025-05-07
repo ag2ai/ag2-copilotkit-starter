@@ -26,7 +26,6 @@ ag2-copilotkit-starter/
 > Note: We recommend using a virtual environment for your project to keep your packages contained. See <a href="https://docs.python.org/3/library/venv.html" target="_blank">venv</a>.
 
 ```sh
-# Install dependencies
 cd agent-py
 pip install -r requirements.txt
 ```
@@ -45,7 +44,7 @@ export OPENAI_API_KEY="your_openai_api_key"
 setx OPENAI_API_KEY "your_openai_api_key"
 ```
 
-> Note: This example uses `gpt-4o-mini` by default, but you can replace it with any other model supported by AG2 by modifying the configuration in the code.
+> Note: This example (simple_workflow.py) uses `gpt-4o-mini` by default, but you can replace it with any other model supported by AG2 by modifying the configuration in the code.
 
 ### 3. Start the Backend Server
 
