@@ -138,7 +138,10 @@ Important: When a membership ID is not found in the system, politely inform the 
 
 INITIAL_MESSAGE = """Hi there! 👋 I'm your personal Travel Guide, here to help you plan an unforgettable trip.
 
-To get started, could you please share your membership ID? This will help me tailor recommendations based on your preferences and travel style."""
+To get started, could you please share your membership ID? This will help me tailor recommendations based on your preferences and travel style.
+
+(Hint: You can try using one of these IDs: P12345, P67890, S12345, S67890. And when the agent is asking your permission to execute the function, please say "continue" to proceed.)
+"""
 
 @wf.register(name="hitl_workflow", description="A simple travel itenarary generator workflow")
 def hitl_workflow(ui: UI, params: dict[str, Any]) -> str:
