@@ -102,7 +102,13 @@ def simple_workflow(ui: UI, params: dict[str, Any]) -> str:
     return ui.process(response)  # type: ignore[no-any-return]
 
 
-adapter = AWPAdapter(provider=wf)
+def without_user_messages(message: Any) -> bool:
+    return not (message.type == "text" and message.content.sender == "User_Agent")
+
+
+adapter = AWPAdapter(
+    provider=wf, wf_name="hitl_workflow", filter=without_user_messages
+)
 
 app = FastAPI()
 app.include_router(adapter.router)
