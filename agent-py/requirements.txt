@@ -1,1 +1,4 @@
-fastagency[openai, fastapi, copilotkit, server]
+ag2[openai,ag-ui]
+python-dotenv
+httpx
+uvicorn

@@ -1,87 +1,65 @@
-# CopilotKit-AG2 Starter
+# AG2 + CopilotKit Starter
 
-This repository contains a simple starter project that demonstrates how to build AI agents with AG2 that interact with CopilotKit.
+A weather agent demo built with [AG2](https://docs.ag2.ai) and the [AG-UI protocol](https://docs.ag2.ai/latest/docs/user-guide/ag-ui/). Includes two frontends: a React/CopilotKit app and a plain HTML page.
 
 ## Project Structure
 
 ```
 ag2-copilotkit-starter/
-├── agent-py/           # Python backend with AG2 agents
-│   └── simple_workflow.py
-│   └── hitl_workflow.py
-└── ui/                 # Frontend application
+├── agent-py/               # Python backend (AG2 weather agent)
+│   ├── backend.py
+│   └── requirements.txt
+├── ui-react/               # React + CopilotKit frontend
+│   └── app/
+│       ├── api/copilotkit/route.ts
+│       ├── layout.tsx
+│       ├── page.tsx
+│       └── globals.css
+├── ui-html/                # Standalone HTML frontend
+│   └── index.html
+└── README.md
 ```
 
 ## Prerequisites
 
-- Python 3.9 or newer
-- Node.js 18.18.0 or newer (specifically: ^18.18.0 || ^19.8.0 || >= 20.0.0)
-- pnpm (for package management)
+- Python 3.10+
+- Node.js 18.18+
 - OpenAI API key
 
 ## Backend Setup
 
-### 1. Install Python Backend Dependencies
-
-> Note: We recommend using a virtual environment for your project to keep your packages contained. See <a href="https://docs.python.org/3/library/venv.html" target="_blank">venv</a>.
-
 ```sh
 cd agent-py
 pip install -r requirements.txt
-```
-
-### 2. Set up your API Key
-
-Before running the code, you need to set your OpenAI API key as an environment variable:
-
-**macOS/Linux:**
-```sh
 export OPENAI_API_KEY="your_openai_api_key"
+python backend.py
 ```
 
-**Windows:**
-```sh
-setx OPENAI_API_KEY "your_openai_api_key"
-```
+The backend server starts at http://localhost:8008.
 
-> Note: This example (simple_workflow.py) uses `gpt-4o-mini` by default, but you can replace it with any other model supported by AG2 by modifying the configuration in the code.
-
-### 3. Start the Backend Server
-
-The command below assumes that you are already inside the `agent-py` directory. If not please `cd` into the directory before running the command.
+## Frontend Option 1: React + CopilotKit
 
 ```sh
-uvicorn simple_workflow:app --port 8008 --reload
+cd ui-react
+npm install
+npm run dev
 ```
 
-> The command above starts the simple agent chat workflow. You can explore other workflows available in the `agent-py` directory, try them out, or even create your own. Each workflow file includes the command to run it at the bottom.
+Open http://localhost:3000 and chat with the weather agent.
 
-The backend server will start at http://localhost:8008.
+## Frontend Option 2: HTML
 
-## Frontend Setup
-
-### 1. Install Frontend Dependencies
-
-Open a new terminal session and run the below command
+Open `ui-html/index.html` directly in a browser, or serve it:
 
 ```sh
-cd ui
-pnpm i
+cd ui-html
+python -m http.server 8080
 ```
 
-### 2. Start the Frontend Application
-
-The command below assumes that you are already inside the `ui` directory. If not please `cd` into the directory before running the command.
-
-```sh
-pnpm run dev
-```
-
-The frontend application will start at http://localhost:3000.
-
-After starting the frontend, please allow a few moments for the Next.js application to compile fully. Once compilation is complete, you can interact with the chat window to communicate with the AG2 agent.
+Then open http://localhost:8080. Make sure the backend is running on port 8008.
 
 ## Additional Resources
 
-- <a href="https://docs.ag2.ai/latest/" target="_blank">AG2 Documentation</a>
-- <a href="https://docs.copilotkit.ai/" target="_blank">CopilotKit Documentation</a>
+- [AG2 Documentation](https://docs.ag2.ai/latest/)
+- [AG-UI Protocol Guide](https://docs.ag2.ai/latest/docs/user-guide/ag-ui/)
+- [CopilotKit Documentation](https://docs.copilotkit.ai/)
