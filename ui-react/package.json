@@ -8,7 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ag-ui/ag2": "latest",
     "@ag-ui/client": "latest",
     "@ag-ui/core": "latest",
     "@copilotkit/react-core": "latest",
