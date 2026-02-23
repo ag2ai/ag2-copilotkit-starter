@@ -9,13 +9,13 @@ ag2-copilotkit-starter/
 ├── agent-py/               # Python backend (AG2 weather agent)
 │   ├── backend.py
 │   └── requirements.txt
-├── ui-react/               # React + CopilotKit frontend
+├── ui-react/               # UI Option 1: React + CopilotKit frontend
 │   └── app/
 │       ├── api/copilotkit/route.ts
 │       ├── layout.tsx
 │       ├── page.tsx
 │       └── globals.css
-├── ui-html/                # Standalone HTML frontend
+├── ui-html/                # UI Option 2: Standalone HTML frontend
 │   └── index.html
 └── README.md
 ```

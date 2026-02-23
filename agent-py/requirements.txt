@@ -2,3 +2,4 @@ ag2[openai,ag-ui]
 python-dotenv
 httpx
 uvicorn
+fastapi
