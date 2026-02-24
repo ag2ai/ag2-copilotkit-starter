@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Add robot avatar to assistant messages */
+.copilotKitMessage.copilotKitAssistantMessage {
+  position: relative;
+  padding-left: 44px;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url("/Robot-MS-Blue.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}

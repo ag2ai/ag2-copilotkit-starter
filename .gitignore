@@ -177,3 +177,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Node.js / Next.js
+node_modules/
+ui-react/.next/
+ui-react/out/
